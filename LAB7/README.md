@@ -1,37 +1,27 @@
-# L6_L7_59 — Phone Repair Quote
+# Lab 7 — Fuzzing for Input Validation Bugs
 
-Lab 7: Fuzzing for Input Validation Bugs
+**C NITISH** · **PES1UG25CS809**
 
-## About
+The phone repair parser accepts an IMEI, a parts order, and a phone brand and model. Hypothesis checks each parser with generated valid inputs, malformed text, and non-text values.
 
-A small Python module that reads phone repair quote details typed in by a user: IMEI numbers, parts orders and phone models. It assumes every input is well formed.
+## Run the application and tests
 
-## Files
+Run from `LAB7/` with Python 3.8 or newer.
 
-| File | Description |
-|------|-------------|
-| `phone_repair_quote_parser.py` | The buggy module you will fuzz and fix |
-| `test_phone_repair_quote_parser.py` | Hypothesis test template to complete |
+```text
+python -m pip install pytest hypothesis
+python phone_repair_quote_parser.py
+python -m pytest test_phone_repair_quote_parser.py -v
+```
 
-Keep all your Lab 7 work in this `LAB7` folder.
-
-Follow the lab handout for the full instructions. Use the file names above wherever the handout refers to the code and test files.
-
-## Screenshots
-
-| Screenshot | What it must show |
-|------------|-------------------|
-| SS1 | `python phone_repair_quote_parser.py` run on the buggy module |
-| SS2 | `pytest test_phone_repair_quote_parser.py` with your completed tests failing on the buggy module |
-| SS3 | `python phone_repair_quote_parser.py` run on your fixed module |
-| SS4 | `pytest test_phone_repair_quote_parser.py` with all tests passing on your fixed module |
+| Function | Accepted input | Invalid result |
+|---|---|---|
+| `mask_imei` | 15 ASCII digits, optionally formatted with whitespace and hyphens. Masks the first 11 digits. | Empty string |
+| `parse_parts_order` | Semicolon-separated `PART xQTY` items with positive ASCII integer quantities. The final quantity wins for repeated part names. | Empty dictionary for the entire order |
+| `parse_model` | A brand followed by whitespace and a nonempty model name. Title-cases the brand and retains the model text. | Pair of empty strings |
 
 ## Deliverables
 
-Commit these three files in this `LAB7` folder:
-
-1. `phone_repair_quote_parser.py`: your fixed module. All three functions must handle any input without crashing.
-2. `test_phone_repair_quote_parser.py`: your completed Hypothesis tests, one for each of the three functions.
-3. `SRN_NAME_LAB7.pdf`: screenshots SS1 to SS4 and your answers to the three reflection questions in the handout.
-
-Be ready to explain the bugs you found and how you fixed them. You may be called on to present.
+- `phone_repair_quote_parser.py` contains the hardened parser and interactive application.
+- `test_phone_repair_quote_parser.py` contains nine Hypothesis properties covering all three functions.
+- [PES1UG25CS809_C_NITISH_LAB7.pdf](PES1UG25CS809_C_NITISH_LAB7.pdf) contains the findings and screenshots SS1–SS4. All nine properties failed on the starter and passed after the fixes.
